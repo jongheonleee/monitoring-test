@@ -6,6 +6,9 @@ from prometheus_client import Counter
 from prometheus_client import Gauge 
 from prometheus_client import Summary 
 
+
+# > 간단한 REST API 정의 
+
 # 메트릭 객체 정의 
 ### 1. 카운팅 객체 
 REQUESTS = Counter("hello_worlds_total", "Hello Worlds requested.!!")
