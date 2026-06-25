@@ -1,0 +1,31 @@
+services:
+  grafana:
+    # 옵션 A: 공식 이미지에 볼륨만 마운트 (편집 시 재빌드 불필요, 컨테이너 재시작만)
+    # Grafana 13.x는 provisioning + unified storage 조합에서 알려진 버그가 있어 11.x 안정판으로 고정
+    image: grafana/grafana:11.6.0
+
+    # 옵션 B: Dockerfile로 provisioning을 베이크한 커스텀 이미지 사용
+    # build:
+    #   context: .
+    #   dockerfile: Dockerfile
+
+    container_name: grafana
+    ports:
+      - "3000:3000"
+    environment:
+      # 초기 계정/비번 — 운영에선 절대 이 값 그대로 쓰지 말 것
+      GF_SECURITY_ADMIN_USER: admin
+      GF_SECURITY_ADMIN_PASSWORD: admin
+      GF_USERS_ALLOW_SIGN_UP: "false"
+    volumes:
+      - grafana-storage:/var/lib/grafana
+      - ./provisioning:/etc/grafana/provisioning
+      - ./dashboards:/var/lib/grafana/dashboards
+    extra_hosts:
+      # Linux 호스트에서도 host.docker.internal가 호스트 가리키게 함
+      # (Windows/Mac Docker Desktop은 자동 지원, 이 줄은 무해함)
+      - "host.docker.internal:host-gateway"
+    restart: unless-stopped
+
+volumes:
+  grafana-storage:

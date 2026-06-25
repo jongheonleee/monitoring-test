@@ -1,0 +1,14 @@
+apiVersion: 1
+
+datasources:
+  - name: Prometheus
+    uid: prometheus
+    type: prometheus
+    access: proxy
+    # 호스트에 떠있는 Prometheus 19090 포트로 접근. 컨테이너 내부에서 host.docker.internal은 호스트(Docker Desktop)를 가리킴
+    url: http://host.docker.internal:19090
+    isDefault: true
+    editable: true
+    jsonData:
+      httpMethod: POST
+      timeInterval: 10s
